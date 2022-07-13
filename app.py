@@ -8,11 +8,11 @@ import pickle
 import numpy as np
 from scipy import stats
 
-app = Flask(__name__)
+application = Flask(__name__)
+app = application
+cors = CORS(application)
 
-cors = CORS(app)
-
-@app.after_request
+@application.after_request
 def after_request(response):
   response.headers.add('Access-Control-Allow-Origin', '*')
   response.headers.add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
@@ -148,11 +148,11 @@ def fertilizer_prediction(input_data):
 
     return prediction_data
 
-@app.route("/", methods=["GET"])
+@application.route("/", methods=["GET"])
 def index():
     return "Eco-tree Api Is Running!"
 
-@app.route("/predict_crop", methods=["GET", "POST"])
+@application.route("/predict_crop", methods=["GET", "POST"])
 def predictcrop():
     try:
         if request.method == "POST":
@@ -168,7 +168,7 @@ def predictcrop():
         return json.dumps({"error":"Please Enter Valid Data"}, default=convert)
 
 
-@app.route("/predict_fertilizer", methods=["GET", "POST"])
+@application.route("/predict_fertilizer", methods=["GET", "POST"])
 def predictfertilizer():
     try:
         if request.method == "POST":
@@ -198,6 +198,6 @@ def predictfertilizer():
         return json.dumps({"error":"Please Enter Valid Data"}, default=convert)
 
 
-if __name__ == "__main__":
-    from waitress import serve
-    serve(app, host='0.0.0.0', port=8080)
+# if __name__ == "__main__":
+#     from waitress import serve
+#     serve(application, host='0.0.0.0', port=8080)
